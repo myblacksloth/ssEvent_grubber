@@ -1,3 +1,5 @@
+![](doc/scr.png)
+
 # Event Tester
 
 Italiano | English
@@ -49,4 +51,3 @@ For a deeper understanding of each component (endpoints, UI, configuration), rea
 ### Quick start (generic)
 - Client: open `Client/index.html` in a modern browser or serve the `Client/` folder with a simple static server.
 - Server: in `Server/node`, install dependencies and start the Node.js server; see its README for details.
-
