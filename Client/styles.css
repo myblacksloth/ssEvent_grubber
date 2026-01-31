@@ -1,0 +1,344 @@
+/*
+ * ssEvent_grubber
+ * Copyright (C) 2026 Antonio Maulucci (https://github.com/myblacksloth)
+ *
+ * Questo programma è software libero: puoi ridistribuirlo e/o modificarlo
+ * secondo i termini della GNU Affero General Public License come pubblicata
+ * dalla Free Software Foundation, versione 3 della Licenza.
+ *
+ * Questo programma è distribuito nella speranza che sia utile, ma SENZA
+ * ALCUNA GARANZIA; senza neppure la garanzia implicita di COMMERCIABILITÀ
+ * o di IDONEITÀ PER UN PARTICOLARE SCOPO. Vedi la GNU Affero General Public License
+ * per maggiori dettagli.
+ *
+ * Dovresti aver ricevuto una copia della GNU Affero General Public License
+ * insieme a questo programma. In caso contrario, vedi <https://www.gnu.org/licenses/>.
+ */
+
+:root {
+    --bg: #0f172a;
+    --panel: #111827;
+    --card: #1f2937;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --primary: #3b82f6;
+    --primary-700: #2563eb;
+    --border: #374151;
+    --accent: #22d3ee;
+    --green: #10b981;
+}
+* {
+    box-sizing: border-box;
+}
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family:
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Helvetica,
+        Arial,
+        "Apple Color Emoji",
+        "Segoe UI Emoji";
+    background: linear-gradient(180deg, #0b1020, #0f172a);
+    color: var(--text);
+    padding: 24px;
+}
+h1 {
+    margin: 0 0 16px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+.toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: linear-gradient(180deg, #0f172a, #0b1326);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    margin-bottom: 16px;
+}
+.dev-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 8px;
+}
+.dev-toggle .toggle-text {
+    color: var(--muted);
+    font-size: 13px;
+}
+.toggle-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-label {
+    width: 46px;
+    height: 26px;
+    border-radius: 999px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    background: #1f2937;
+    border: 1px solid var(--border);
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 2px 8px rgba(0, 0, 0, 0.25);
+}
+.toggle-label::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+.toggle-input:checked + .toggle-label {
+    background: linear-gradient(180deg, var(--primary), var(--primary-700));
+    border-color: var(--primary);
+}
+.toggle-input:checked + .toggle-label::after {
+    transform: translateX(20px);
+    background: white;
+}
+.btn {
+    appearance: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: linear-gradient(180deg, #111827, #0b1326);
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition:
+        transform 0.08s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.btn:hover {
+    transform: translateY(-1px);
+    border-color: #4b5563;
+}
+.btn:active {
+    transform: translateY(0);
+}
+.btn.active {
+    background: linear-gradient(180deg, #1f2937, #0f172a);
+    border-color: var(--primary);
+    box-shadow:
+        0 8px 24px rgba(59, 130, 246, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.stats {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 14px;
+}
+.card {
+    background: linear-gradient(180deg, #0f172a, #0b1326);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 60vh;
+    overflow: auto;
+}
+.item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+}
+.item:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.01);
+}
+.time {
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+    white-space: nowrap;
+}
+.payload {
+    color: var(--text);
+}
+.payload pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family:
+        ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    color: #d1d5db;
+}
+.endpoint {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 6px;
+    word-break: break-all;
+}
+.endpoint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-icon {
+    appearance: none;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0;
+    font-size: 12px;
+}
+.btn-icon:hover {
+    color: var(--text);
+    border-color: #4b5563;
+}
+.item-actions {
+    margin-top: 6px;
+    display: flex;
+    gap: 8px;
+}
+.source-tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-size: 10px;
+    margin-left: 8px;
+    border: 1px solid var(--border);
+    opacity: 0.9;
+}
+.source-sse {
+    color: #60a5fa;
+    border-color: #1d4ed8;
+}
+.source-poll {
+    color: #22d3ee;
+    border-color: #0891b2;
+}
+.source-rest {
+    color: #34d399;
+    border-color: #047857;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    margin-left: 8px;
+    border: 1px solid var(--border);
+    color: var(--accent);
+}
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(17, 24, 39, 0.5);
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(6px);
+}
+.empty {
+    padding: 24px;
+    color: var(--muted);
+    text-align: center;
+}
+.header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-sm {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+/* REST client */
+.rest-form {
+    padding: 14px;
+    display: grid;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+}
+.rest-form .row {
+    display: grid;
+    gap: 6px;
+}
+.rest-form label {
+    color: var(--muted);
+    font-size: 12px;
+}
+.rest-form input[type="text"],
+.rest-form select,
+.rest-form textarea {
+    width: 100%;
+    background: #0b1326;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+.rest-form textarea {
+    font-family:
+        ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+}
+.rest-form .actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.rest-response {
+    display: grid;
+}
+.rest-output {
+    margin: 0;
+    padding: 14px;
+    max-height: 40vh;
+    overflow: auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid var(--border);
+    white-space: pre-wrap;
+    word-break: break-word;
+}

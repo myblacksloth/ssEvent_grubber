@@ -1,0 +1,128 @@
+<!--
+* ssEvent_grubber
+* Copyright (C) 2026 Antonio Maulucci (https://github.com/myblacksloth)
+*
+* Questo programma è software libero: puoi ridistribuirlo e/o modificarlo
+* secondo i termini della GNU Affero General Public License come pubblicata
+* dalla Free Software Foundation, versione 3 della Licenza.
+*
+* Questo programma è distribuito nella speranza che sia utile, ma SENZA
+* ALCUNA GARANZIA; senza neppure la garanzia implicita di COMMERCIABILITÀ
+* o di IDONEITÀ PER UN PARTICOLARE SCOPO. Vedi la GNU Affero General Public License
+* per maggiori dettagli.
+*
+* Dovresti aver ricevuto una copia della GNU Affero General Public License
+* insieme a questo programma. In caso contrario, vedi <https://www.gnu.org/licenses/>.
+-->
+<!doctype html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <title>SSE Demo</title>
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+    <body>
+        <h1>Server-Sent Events Demo</h1>
+        <div class="toolbar">
+            <div class="dev-toggle">
+                <input
+                    type="checkbox"
+                    id="toggleDevMode"
+                    class="toggle-input"
+                />
+                <label
+                    for="toggleDevMode"
+                    class="toggle-label"
+                    aria-label="Dev mode"
+                ></label>
+                <span class="toggle-text">Dev mode</span>
+            </div>
+            <button id="btnSSE" class="btn active">Senza polling (SSE)</button>
+            <button id="btnPolling" class="btn">Con polling</button>
+            <button id="btnAll" class="btn">Tutte le risposte</button>
+            <button id="btnRest" class="btn">Client REST</button>
+            <div class="stats" id="stats">SSE: 0 • Polling: 0</div>
+        </div>
+
+        <div class="card" id="eventsCard">
+            <div class="header-row">
+                <div id="listTitle">Eventi SSE</div>
+                <div class="header-actions">
+                    <div class="badge" id="badgeCount">0</div>
+                    <button
+                        id="btnClearLogs"
+                        class="btn btn-sm"
+                        title="Pulisci i log del tab corrente"
+                    >
+                        Pulisci
+                    </button>
+                </div>
+            </div>
+            <ul id="eventList" class="list"></ul>
+            <div id="emptyState" class="empty" style="display: none">
+                Nessun evento ancora ricevuto.
+            </div>
+        </div>
+
+        <!-- REST Client Card -->
+        <div class="card" id="restCard" style="display: none">
+            <div class="header-row">
+                <div>Client REST</div>
+            </div>
+            <div class="rest-form">
+                <div class="row">
+                    <label for="restEndpoint">Endpoint</label>
+                    <input
+                        id="restEndpoint"
+                        type="text"
+                        placeholder=""
+                        value=""
+                    />
+                </div>
+                <div class="row">
+                    <label for="restMethod">Metodo</label>
+                    <select id="restMethod">
+                        <option value="GET">GET</option>
+                        <option value="POST" selected>POST</option>
+                        <option value="PUT">PUT</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label for="restBody">Body (JSON)</label>
+                    <textarea id="restBody" rows="6" placeholder=""></textarea>
+                </div>
+                <div class="row actions">
+                    <button id="btnSendRest" class="btn">Invia</button>
+                </div>
+            </div>
+            <div class="rest-response">
+                <div class="header-row">
+                    <div>Risposta</div>
+                    <div class="header-actions">
+                        <div class="badge" id="restStatus">—</div>
+                        <button
+                            id="btnCopyRest"
+                            class="btn btn-sm"
+                            title="Copia la risposta negli appunti"
+                        >
+                            Copia
+                        </button>
+                        <button
+                            id="btnClearRest"
+                            class="btn btn-sm"
+                            title="Pulisci la risposta REST"
+                        >
+                            Pulisci
+                        </button>
+                    </div>
+                </div>
+                <pre id="restOutput" class="rest-output"></pre>
+            </div>
+        </div>
+
+        <!-- legacy container left for compatibility -->
+        <div id="events" style="display: none"></div>
+
+        <script src="./app.js"></script>
+    </body>
+</html>
